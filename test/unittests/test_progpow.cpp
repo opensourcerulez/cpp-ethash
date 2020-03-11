@@ -17,9 +17,9 @@ TEST(progpow, revision)
     static_assert(progpow::revision[1] == '.', "");
     static_assert(progpow::revision[2] == '9', "");
     static_assert(progpow::revision[3] == '.', "");
-    static_assert(progpow::revision[4] == '2', "");
-    EXPECT_EQ(progpow::revision, "0.9.2");
-    EXPECT_EQ(progpow::revision, (std::string{"0.9.2"}));
+    static_assert(progpow::revision[4] == '4', "");
+    EXPECT_EQ(progpow::revision, "0.9.4");
+    EXPECT_EQ(progpow::revision, (std::string{"0.9.4"}));
 }
 
 TEST(progpow, l1_cache)
@@ -32,9 +32,10 @@ TEST(progpow, l1_cache)
         cache_slice[i] = ethash::le::uint32(context.l1_cache[i]);
 
     const std::array<uint32_t, test_size> expected{
-        {690150178, 1181503948, 2248155602, 2118233073, 2193871115, 1791778428, 1067701239,
-            724807309, 530799275, 3480325829, 3899029234, 1998124059, 2541974622, 1100859971,
-            1297211151, 3268320000, 2217813733, 2690422980, 3172863319, 2651064309}};
+            {2492749011, 430724829, 2029256771, 3095580433, 3583790154, 3025086503,
+                    805985885, 4121693337, 2320382801, 3763444918, 1006127899, 1480743010,
+                    2592936015, 2598973744, 3038068233, 2754267228, 2867798800, 2342573634,
+                    467767296, 246004123}};
     EXPECT_EQ(cache_slice, expected);
 }
 
@@ -43,8 +44,8 @@ TEST(progpow, hash_empty)
     auto& context = get_ethash_epoch_context_0();
 
     const auto result = progpow::hash(context, 0, {}, 0);
-    const auto mix_hex = "faeb1be51075b03a4ff44b335067951ead07a3b078539ace76fd56fc410557a3";
-    const auto final_hex = "63155f732f2bf556967f906155b510c917e48e99685ead76ea83f4eca03ab12b";
+    const auto mix_hex = "b1388e12e9898029a487f5534225c2ea8bd79c6ef6754db0405809f53d83c497";
+    const auto final_hex = "3d2f6484ee555362e9d8e2ca54fb99741e755e849f9900ef84ad65aa3c935bd1";
     EXPECT_EQ(to_hex(result.mix_hash), mix_hex);
     EXPECT_EQ(to_hex(result.final_hash), final_hex);
 }
@@ -59,8 +60,8 @@ TEST(progpow, hash_30000)
     auto context = ethash::create_epoch_context(ethash::get_epoch_number(block_number));
 
     const auto result = progpow::hash(*context, block_number, header, nonce);
-    const auto mix_hex = "11f19805c58ab46610ff9c719dcf0a5f18fa2f1605798eef770c47219274767d";
-    const auto final_hex = "5b7ccd472dbefdd95b895cac8ece67ff0deb5a6bd2ecc6e162383d00c3728ece";
+    const auto mix_hex = "89da5e55d9e963ac099e40396d05fd6fa05124ac22dfe028c1ba115d6b664e01";
+    const auto final_hex = "0f765cdc8d3facb1c44ea22e973f2a4be5d01ca48dda2898aa93b1359f3a8c99";
     EXPECT_EQ(to_hex(result.mix_hash), mix_hex);
     EXPECT_EQ(to_hex(result.final_hash), final_hex);
 }
@@ -106,8 +107,8 @@ TEST(progpow, search)
     auto& ctxl = reinterpret_cast<const ethash::epoch_context&>(ctx);
 
     auto boundary = to_hash256("00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-    auto sr = progpow::search(ctx, 0, {}, boundary, 0, 100);
-    auto srl = progpow::search_light(ctxl, 0, {}, boundary, 0, 100);
+    auto sr = progpow::search(ctx, 0, {}, boundary, 300, 100);
+    auto srl = progpow::search_light(ctxl, 0, {}, boundary, 300, 100);
 
     EXPECT_EQ(sr.mix_hash, ethash::hash256{});
     EXPECT_EQ(sr.final_hash, ethash::hash256{});
@@ -116,17 +117,17 @@ TEST(progpow, search)
     EXPECT_EQ(sr.final_hash, srl.final_hash);
     EXPECT_EQ(sr.nonce, srl.nonce);
 
-    sr = progpow::search(ctx, 0, {}, boundary, 100, 100);
-    srl = progpow::search_light(ctxl, 0, {}, boundary, 100, 100);
+    sr = progpow::search(ctx, 0, {}, boundary, 700, 100);
+    srl = progpow::search_light(ctxl, 0, {}, boundary, 700, 100);
 
     EXPECT_NE(sr.mix_hash, ethash::hash256{});
     EXPECT_NE(sr.final_hash, ethash::hash256{});
-    EXPECT_EQ(sr.nonce, 185);
+    EXPECT_EQ(sr.nonce, 740);
     EXPECT_EQ(sr.mix_hash, srl.mix_hash);
     EXPECT_EQ(sr.final_hash, srl.final_hash);
     EXPECT_EQ(sr.nonce, srl.nonce);
 
-    auto r = progpow::hash(ctx, 0, {}, 185);
+    auto r = progpow::hash(ctx, 0, {}, 740);
     EXPECT_EQ(sr.final_hash, r.final_hash);
     EXPECT_EQ(sr.mix_hash, r.mix_hash);
 }
