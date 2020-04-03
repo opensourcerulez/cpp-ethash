@@ -11,16 +11,16 @@
 #include <gtest/gtest.h>
 #include <array>
 
-TEST(progpow, revision)
-{
-    static_assert(progpow::revision[0] == '0', "");
-    static_assert(progpow::revision[1] == '.', "");
-    static_assert(progpow::revision[2] == '9', "");
-    static_assert(progpow::revision[3] == '.', "");
-    static_assert(progpow::revision[4] == '4', "");
-    EXPECT_EQ(progpow::revision, "0.9.4");
-    EXPECT_EQ(progpow::revision, (std::string{"0.9.4"}));
-}
+//TEST(progpow, revision)
+//{
+//    static_assert(progpow::revision[0] == '0', "");
+//    static_assert(progpow::revision[1] == '.', "");
+//    static_assert(progpow::revision[2] == '9', "");
+//    static_assert(progpow::revision[3] == '.', "");
+//    static_assert(progpow::revision[4] == '4', "");
+//    EXPECT_EQ(progpow::revision, "0.9.4");
+//    EXPECT_EQ(progpow::revision, (std::string{"0.9.4"}));
+//}
 
 TEST(progpow, l1_cache)
 {
@@ -60,8 +60,8 @@ TEST(progpow, hash_30000)
     auto context = ethash::create_epoch_context(ethash::get_epoch_number(block_number));
 
     const auto result = progpow::hash(*context, block_number, header, nonce);
-    const auto mix_hex = "89da5e55d9e963ac099e40396d05fd6fa05124ac22dfe028c1ba115d6b664e01";
-    const auto final_hex = "0f765cdc8d3facb1c44ea22e973f2a4be5d01ca48dda2898aa93b1359f3a8c99";
+    const auto mix_hex = "aa15c8b7b34bfc7da13e6d734f63dd0517da65072f4b833c52d586cc3089a990";
+    const auto final_hex = "d8f9786659a08e0ae792bb39725d3dc1e2cc0fb36c228a0ec3101bf17a7cb44b";
     EXPECT_EQ(to_hex(result.mix_hash), mix_hex);
     EXPECT_EQ(to_hex(result.final_hash), final_hex);
 }

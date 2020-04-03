@@ -15,6 +15,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <limits>
+#include <iostream>
 
 namespace ethash
 {
@@ -23,7 +24,7 @@ constexpr static int light_cache_init_size = 1 << 24;
 constexpr static int light_cache_growth = 1 << 17;
 constexpr static int light_cache_rounds = 3;
 constexpr static int full_dataset_init_size = 1 << 30;
-constexpr static int full_dataset_growth = 1 << 23;
+constexpr static int full_dataset_growth = 1 << 23 | 1 << 22;
 constexpr static int full_dataset_item_parents = 512;
 
 // Verify constants:
